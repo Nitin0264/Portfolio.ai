@@ -17,13 +17,14 @@ export default function Navbar() {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-darkBg/80 backdrop-blur-md border-b border-slate-800 py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
         
-        {/* Brand / Logo */}
-        {/* Brand / Logo */}
+ 
+       
+    {/* Brand / Logo */}
         <a href="#" className="flex items-center gap-2 text-white font-bold text-lg tracking-tight">
           <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
             <Terminal className="w-4 h-4" />
           </div>
-          <span>Nitin<span className="text-sky-400"></span></span>
+          <span>Nitin<span className="text-sky-400">.online</span></span>
         </a>
 
         {/* Desktop Nav Links */}
