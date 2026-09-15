@@ -1,71 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import { Terminal, Menu, X, FileText } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export default function Hero() {
+  const heroRef = useRef(null);
+  const portraitRef = useRef(null);
 
+  // Mouse move parallax effect for the portrait cutout
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const handleMouseMove = (e) => {
+      if (!portraitRef.current) return;
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 20; // max 20px movement
+      const y = (e.clientY / innerHeight - 0.5) * 20;
+      
+      portraitRef.current.style.transform = `translate(${x}px, ${y}px)`;
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-darkBg/80 backdrop-blur-md border-b border-slate-800 py-4' : 'bg-transparent py-6'}`}>
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+    <section ref={heroRef} className="relative min-h-screen bg-slate-950 text-white flex flex-col justify-between pt-28 pb-12 overflow-hidden px-4 sm:px-6 lg:px-8">
+      
+      {/* Navigation or top spacing marker if needed */}
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10 my-auto">
         
- 
-       
-    {/* Brand / Logo */}
-        <a href="#" className="flex items-center gap-2 text-white font-bold text-lg tracking-tight">
-          <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
-            <Terminal className="w-4 h-4" />
+        {/* Left Side: Intro & Summary copy */}
+        <div className="lg:col-span-7 space-y-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold tracking-wider uppercase">
+            <Sparkles className="w-3.5 h-3.5" /> MERN Stack & AI Developer
           </div>
-          <span>Nitin<span className="text-sky-400">.online</span></span>
-        </a>
+          
+          {/* Massive Typography Backdrop */}
+          <div className="relative">
+            <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-slate-300 uppercase leading-none select-none opacity-90">
+              HI, I'M <span className="bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">NITIN</span>
+            </h1>
+          </div>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-          <a href="#about" className="hover:text-sky-400 transition-colors">About</a>
-          <a href="#projects" className="hover:text-sky-400 transition-colors">Projects</a>
-          <a href="#experience" className="hover:text-sky-400 transition-colors">Experience</a>
-          <a href="#skills-education" className="hover:text-sky-400 transition-colors">Skills</a>
-          <a href="#contact" className="hover:text-sky-400 transition-colors">Contact</a>
-        </nav>
+          <p className="text-slate-400 text-base sm:text-lg max-w-xl leading-relaxed">
+            Front-End & MERN Stack Developer driven by crafting responsive, high-performance web applications and seamless digital user experiences.
+          </p>
 
-        {/* Resume Button */}
-        <div className="hidden md:flex items-center gap-4">
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-sm font-semibold transition-all shadow-lg shadow-sky-500/20"
-          >
-            <FileText className="w-4 h-4" /> Get in Touch
-          </a>
+          <div className="flex flex-wrap gap-4 pt-2">
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-indigo-600 text-slate-950 font-bold px-6 py-3.5 rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/20"
+            >
+              Contact Me <ArrowRight className="w-4 h-4" />
+            </a>
+            <a
+              href="#projects"
+              className="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-slate-800 transition-colors"
+            >
+              Explore Projects
+            </a>
+          </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-slate-300 hover:text-white"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        {/* Right Side: Floating Moving Portrait Cutout */}
+        <div className="lg:col-span-5 flex justify-center relative">
+          <div className="absolute w-72 h-72 bg-gradient-to-tr from-cyan-500/20 to-indigo-600/20 rounded-full blur-3xl -z-10"></div>
+          
+          {/* Portrait Container with Parallax Ref */}
+          <div 
+            ref={portraitRef}
+            className="relative transition-transform duration-100 ease-out w-72 h-72 sm:w-85 sm:h-85 rounded-3xl overflow-hidden border-2 border-slate-800 shadow-2xl bg-slate-900"
+          >
+            {/* Replace this src with Nitin's actual portrait/headshot asset */}
+            <img 
+              src="/nitin-portrait.png" 
+              alt="Nitin Chauhan" 
+              className="w-full h-full object-cover object-top scale-105"
+              onError={(e) => {
+                // Fallback placeholder if image path isn't set up yet
+                e.target.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60";
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
+          </div>
+        </div>
 
       </div>
-
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-darkBg/95 border-b border-slate-800 px-6 py-6 space-y-4 backdrop-blur-xl">
-          <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block text-slate-300 hover:text-sky-400 font-medium">About</a>
-          <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="block text-slate-300 hover:text-sky-400 font-medium">Projects</a>
-          <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="block text-slate-300 hover:text-sky-400 font-medium">Experience</a>
-          <a href="#skills-education" onClick={() => setMobileMenuOpen(false)} className="block text-slate-300 hover:text-sky-400 font-medium">Skills</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-slate-300 hover:text-sky-400 font-medium">Contact</a>
-        </div>
-      )}
-    </header>
+    </section>
   );
 }
