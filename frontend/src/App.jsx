@@ -6,6 +6,7 @@ import Projects from './components/Projects';
 import AIContact from './components/AIContact';
 import { Sparkles, X, MessageSquare, Bot, Send, User } from 'lucide-react';
 import SkillsCertificates from './components/SkillsCertificates';
+import CustomCursor from './components/CustomCursor';
 
 export default function App() {
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
@@ -71,6 +72,7 @@ export default function App() {
 
       {/* Main Sections */}
       <main>
+        <CustomCursor />
         <Hero />
         <About />
         <SkillsEducation />
