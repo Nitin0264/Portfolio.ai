@@ -4,19 +4,20 @@ import About from './components/About';
 import SkillsEducation from './components/SkillsEducation';
 import Projects from './components/Projects';
 import AIContact from './components/AIContact';
-import { Sparkles, X, MessageSquare, Bot, Send, User } from 'lucide-react';
+import { Sparkles, X, Bot, Send, User } from 'lucide-react';
 import SkillsCertificates from './components/SkillsCertificates';
 import CustomCursor from './components/CustomCursor';
+import { GoogleGenAI } from '@google/genai';
 
 export default function App() {
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: 'ai', text: "Hello! I'm Nitin's virtual assistant. Ask me anything about his MERN stack skills, experience, or projects!" }
+    { sender: 'ai', text: "Hello! I'm Nitin's live Gemini AI assistant. Ask me anything about his MERN stack skills, experience, or projects!" }
   ]);
   const [chatInput, setChatInput] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
 
-  // Floating AI Widget Chat Handler
+  // Floating AI Widget Chat Handler using direct Gemini SDK (100% Frontend safe)
   const handleFloatingAIChat = async (e) => {
     e.preventDefault();
     if (!chatInput.trim() || aiLoading) return;
@@ -27,20 +28,36 @@ export default function App() {
     setAiLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/ai-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: userMsg })
-      });
-      const data = await res.json();
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-      if (data.success && data.reply) {
-        setMessages(prev => [...prev, { sender: 'ai', text: data.reply }]);
-      } else {
-        setMessages(prev => [...prev, { sender: 'ai', text: data.error || "Sorry, I couldn't reach the AI service right now." }]);
+      if (!apiKey || apiKey.includes('your_actual')) {
+        setMessages(prev => [...prev, { sender: 'ai', text: "Please configure your VITE_GEMINI_API_KEY in the frontend .env file to enable live AI responses." }]);
+        setAiLoading(false);
+        return;
       }
+
+      // Initialize GoogleGenAI locally inside the function call
+      const ai = new GoogleGenAI({ apiKey });
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.6-flash',
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              {
+                text: `You are an AI portfolio assistant for Nitin Chauhan. Nitin is a MERN Stack Developer (MongoDB, Express, React, Node.js) with projects like Shubh Yogshala (shubhyogshala.com) and a GitHub profile at https://github.com/Nitin0264. Answer questions professionally and concisely on his behalf. User question: ${userMsg}`
+              }
+            ]
+          }
+        ]
+      });
+
+      const reply = response.text || "I couldn't generate a response right now.";
+      setMessages(prev => [...prev, { sender: 'ai', text: reply }]);
     } catch (err) {
-      setMessages(prev => [...prev, { sender: 'ai', text: "Network error. Make sure your backend server is running on port 5000." }]);
+      console.error('Gemini Widget Error:', err);
+      setMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I encountered an error connecting to Gemini. Please try again." }]);
     } finally {
       setAiLoading(false);
     }
@@ -50,7 +67,7 @@ export default function App() {
     <div className="bg-slate-950 text-white min-h-screen font-sans selection:bg-cyan-500 selection:text-slate-950 relative">
       
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900">
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-slate-950/85 backdrop-blur-md border-b border-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <a href="#" className="text-xl font-black tracking-wider bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">
             NITIN.ONLINE
@@ -79,7 +96,6 @@ export default function App() {
         <Projects />
         <AIContact />
         <SkillsCertificates /> 
-      <Projects />
       </main>
 
       {/* Footer */}
@@ -145,7 +161,7 @@ export default function App() {
               ))}
               {aiLoading && (
                 <div className="flex items-center gap-2 text-cyan-400 text-xs animate-pulse">
-                  <Bot className="w-4 h-4" /> AI is thinking...
+                  <Bot className="w-4 h-4" /> Gemini is thinking...
                 </div>
               )}
             </div>
