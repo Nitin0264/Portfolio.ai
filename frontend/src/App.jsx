@@ -3,7 +3,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import SkillsEducation from './components/SkillsEducation';
 import Projects from './components/Projects';
-import AIContact from './components/AIContact';
+import AIContact from "./components/AiContact";
 import { Sparkles, X, Bot, Send, User } from 'lucide-react';
 import SkillsCertificates from './components/SkillsCertificates';
 import CustomCursor from './components/CustomCursor';
