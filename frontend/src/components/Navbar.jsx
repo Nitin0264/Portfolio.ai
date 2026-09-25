@@ -1,88 +1,107 @@
-import React, { useEffect, useRef } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, X, FileText, Code2 } from 'lucide-react';
 
-export default function Hero() {
-  const heroRef = useRef(null);
-  const portraitRef = useRef(null);
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Mouse move parallax effect for the portrait cutout
+  // Add background blur/shadow on scroll
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!portraitRef.current) return;
-      const { innerWidth, innerHeight } = window;
-      const x = (e.clientX / innerWidth - 0.5) * 20; // max 20px movement
-      const y = (e.clientY / innerHeight - 0.5) * 20;
-      
-      portraitRef.current.style.transform = `translate(${x}px, ${y}px)`;
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navLinks = [
+    { name: 'About', href: '#about' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Contact', href: '#contact' },
+  ];
+
   return (
-    <section ref={heroRef} className="relative min-h-screen bg-slate-950 text-white flex flex-col justify-between pt-28 pb-12 overflow-hidden px-4 sm:px-6 lg:px-8">
-      
-      {/* Navigation or top spacing marker if needed */}
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10 my-auto">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 py-4 shadow-lg'
+          : 'bg-transparent py-6'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
-        {/* Left Side: Intro & Summary copy */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold tracking-wider uppercase">
-            <Sparkles className="w-3.5 h-3.5" /> MERN Stack & AI Developer
+        {/* Brand / Logo */}
+        <a href="#" className="flex items-center gap-2 text-white font-black text-xl tracking-wider group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-slate-950 font-bold shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+            N
           </div>
-          
-          {/* Massive Typography Backdrop */}
-          <div className="relative">
-            <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-slate-300 uppercase leading-none select-none opacity-90">
-              HI, I'M <span className="bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">NITIN</span>
-            </h1>
-          </div>
+          <span>NITIN<span className="text-cyan-400">.</span>DEV</span>
+        </a>
 
-          <p className="text-slate-400 text-base sm:text-lg max-w-xl leading-relaxed">
-            Front-End & MERN Stack Developer driven by crafting responsive, high-performance web applications and seamless digital user experiences.
-          </p>
-
-          <div className="flex flex-wrap gap-4 pt-2">
+        {/* Desktop Nav Links */}
+        <nav className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
             <a
-              href="#contact"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-indigo-600 text-slate-950 font-bold px-6 py-3.5 rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/20"
+              key={link.name}
+              href={link.href}
+              className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors"
             >
-              Contact Me <ArrowRight className="w-4 h-4" />
+              {link.name}
             </a>
-            <a
-              href="#projects"
-              className="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-slate-800 transition-colors"
-            >
-              Explore Projects
-            </a>
-          </div>
-        </div>
+          ))}
+        </nav>
 
-        {/* Right Side: Floating Moving Portrait Cutout */}
-        <div className="lg:col-span-5 flex justify-center relative">
-          <div className="absolute w-72 h-72 bg-gradient-to-tr from-cyan-500/20 to-indigo-600/20 rounded-full blur-3xl -z-10"></div>
-          
-          {/* Portrait Container with Parallax Ref */}
-          <div 
-            ref={portraitRef}
-            className="relative transition-transform duration-100 ease-out w-72 h-72 sm:w-85 sm:h-85 rounded-3xl overflow-hidden border-2 border-slate-800 shadow-2xl bg-slate-900"
+        {/* Desktop Resume Action */}
+        <div className="hidden md:flex items-center gap-4">
+          <a
+            href="/nitin-resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-xs font-semibold bg-slate-900 border border-slate-700 text-cyan-400 px-4 py-2.5 rounded-xl hover:bg-slate-800 transition-all shadow-sm"
           >
-            {/* Replace this src with Nitin's actual portrait/headshot asset */}
-            <img 
-              src="/nitin-portrait.png" 
-              alt="Nitin Chauhan" 
-              className="w-full h-full object-cover object-top scale-105"
-              onError={(e) => {
-                // Fallback placeholder if image path isn't set up yet
-                e.target.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60";
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
-          </div>
+            <FileText className="w-3.5 h-3.5" /> Resume
+          </a>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+          aria-label="Toggle Menu"
+        >
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
 
       </div>
-    </section>
+
+      {/* Mobile Dropdown Menu */}
+      {isOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 bg-slate-950/95 backdrop-blur-xl border-b border-slate-800 px-4 pt-4 pb-6 shadow-2xl flex flex-col gap-4">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className="text-base font-medium text-slate-200 hover:text-cyan-400 py-2 border-b border-slate-900/60 transition-colors"
+            >
+              {link.name}
+            </a>
+          ))}
+          <a
+            href="/nitin-resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 text-sm font-semibold bg-slate-900 border border-slate-700 text-cyan-400 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all mt-2"
+          >
+            <FileText className="w-4 h-4" /> View Resume
+          </a>
+        </div>
+      )}
+    </header>
   );
 }

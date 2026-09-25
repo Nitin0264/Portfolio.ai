@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ExternalLink, Code2, Database, LayoutGrid, Server } from 'lucide-react';
+import { ExternalLink, Code2 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -7,19 +7,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projectsData = [
   {
-    title: 'Shubh Yogshala Platform',
-    description: 'A comprehensive platform for a Yoga Studio with class scheduling, booking management, and content delivery.',
-    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600&auto=format&fit=crop',
-    tags: ['React', 'Node.js', 'MongoDB', 'Tailwind'],
-    liveUrl: 'https://shubhyogshala.com',
+    title: 'MERN E-Commerce Storefront (E-Commerce Pulse)',
+    description: 'A fully functional online clothing store featuring category and type filters, product collections, and responsive grid layouts.',
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=600&auto=format&fit=crop', // Professional clothing/store aesthetic
+    tags: ['MERN Stack', 'Redux Toolkit', 'Tailwind CSS', 'Node.js'],
+    liveUrl: 'https://ecommerce-nitin.netlify.app',
     repoUrl: 'https://github.com/Nitin0264',
   },
   {
-    title: 'MERN E-Commerce Storefront',
-    description: 'A fully functional online clothing store with user authentication, product filtering, cart management, and payment integration.',
-    image: 'https://images.unsplash.com/photo-1557821552-17105176675c?q=80&w=600&auto=format&fit=crop',
-    tags: ['MERN Stack', 'Redux Toolkit', 'Stripe', 'Styled Components'],
-    liveUrl: '#',
+    title: 'Shubh Yogshala Platform',
+    description: 'A comprehensive platform for a Yoga Studio with class scheduling, booking management, and serene content delivery.',
+    image: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=600&auto=format&fit=crop', // Serene yoga studio aesthetic
+    tags: ['React', 'Node.js', 'MongoDB', 'Tailwind'],
+    liveUrl: 'https://shubhyogshala.com',
     repoUrl: 'https://github.com/Nitin0264',
   },
   {
@@ -105,6 +105,9 @@ export default function Projects() {
                   src={project.image}
                   alt={project.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={(e) => {
+                    e.target.src = "https://images.unsplash.com/photo-1557821552-17105176675c?q=80&w=600&auto=format&fit=crop";
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
                 
