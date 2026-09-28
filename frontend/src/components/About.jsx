@@ -45,9 +45,8 @@ export default function About() {
 
         <div className="flex justify-center gap-4 flex-wrap mb-16">
           <a
-            href="/nitin-resume.pdf" 
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/nitinreact.pdf" 
+            download="Nitin_Chauhan_Resume.pdf"
             className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white px-8 py-4 rounded-2xl font-bold transition-all shadow-xl group"
           >
             <Download className="w-5 h-5 text-cyan-400 group-hover:-translate-y-0.5 transition-transform" /> 

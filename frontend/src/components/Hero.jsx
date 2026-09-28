@@ -57,7 +57,7 @@ export default function Hero() {
               Explore Projects
             </a>
             <a
-              href="/nitin-resume.pdf"
+              href="/nitinreact.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-slate-900 border border-cyan-500/30 text-cyan-400 font-semibold px-6 py-3.5 rounded-xl hover:bg-slate-800 transition-colors shadow-lg"
